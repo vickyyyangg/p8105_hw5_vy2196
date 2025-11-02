@@ -1,0 +1,33 @@
+---
+title: "hw5_vy2196"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(rvest)
+
+```
+
+### Problem 1
+
+```{r}
+# Function to check if at least two people share a birthday
+share_birthday = function(n) {
+  birthdays = sample(1:365, n, replace = TRUE)  # randomly assign birthdays
+  return(length(unique(birthdays)) < n)          
+}
+
+set.seed(1)
+n_sim = 10000 # number of simulations per group size
+
+group_sizes = 2:50
+prob_shared = numeric(length(group_sizes))
+
+for (i in seq_along(group_sizes)) {
+  n = group_sizes[i]
+  results = replicate(n_sim, share_birthday(n))
+  prob_shared[i] = mean(results)   # proportion of TRUE results
+}
+```
+
