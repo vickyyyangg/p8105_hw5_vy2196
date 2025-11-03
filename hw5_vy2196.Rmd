@@ -148,3 +148,39 @@ city_summary = homicides |>
 
 ```
 
+```{r}
+baltimore = city_summary |>
+  filter(city_state == "Baltimore, MD")
+
+baltimore_test = prop.test(
+  x = baltimore$unsolved,
+  n = baltimore$total
+)
+
+baltimore_tidy = tidy(baltimore_test)
+baltimore_tidy |>
+  select(estimate, conf.low, conf.high)
+```
+```{r}
+city_results = city_summary |>
+  mutate(
+    test = map2(unsolved, total, ~ prop.test(.x, .y)),
+    tidy = map(test, tidy)) |>
+  unnest(tidy) |>
+  select(city_state, estimate, conf.low, conf.high)
+
+city_results |>
+  mutate(city_state = fct_reorder(city_state, estimate)) |>
+  ggplot(aes(x = estimate, y = city_state)) +
+  geom_point() +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2) +
+  labs(
+    title = "Proportion of Unsolved Homicides by City",
+    x = "Proportion Unsolved (with 95% CI)",
+    y = "City"
+  ) +
+  theme_minimal()
+
+
+```
+
