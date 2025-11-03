@@ -124,3 +124,27 @@ ggplot(mu_summary, aes(x = true_mu)) +
 The sample average of 𝜇̂  across tests for which the null is rejected approximately equal to the average estimate of 𝜇̂ when the true mean is greater than or equal to 4. The red line peaks at 1 because that's where the most extreme 5% of all the samples are, which shows extreme bias. And it slowly merges with the black line when true mean is 4 or more since more and more samples are significant
 
 
+### Problem 3
+
+```{r}
+library(purrr)
+```
+
+```{r}
+homicides = read_csv("https://raw.githubusercontent.com/washingtonpost/data-homicides/master/homicide-data.csv")
+
+glimpse(homicides)
+
+```
+The raw data includes `uid` which is specific case id for specific city, information about the victim such as first and last name, gender, city, state, and the disposition. 
+
+```{r}
+city_summary = homicides |>
+  mutate(city_state = paste(city, state, sep = ", ")) |>
+  group_by(city_state) |>
+  summarise(
+    total = n(),
+    unsolved = sum(disposition %in% c("Closed without arrest", "Open/No arrest")))
+
+```
+
