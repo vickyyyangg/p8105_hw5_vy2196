@@ -173,7 +173,8 @@ city_results |>
   mutate(city_state = fct_reorder(city_state, estimate)) |>
   ggplot(aes(x = estimate, y = city_state)) +
   geom_point() +
-  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.2) +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), 
+                width = 0.8) +
   labs(
     title = "Proportion of Unsolved Homicides by City",
     x = "Proportion Unsolved (with 95% CI)",
